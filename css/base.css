@@ -1,0 +1,14 @@
+img {
+    width: 300px;
+    height: 250px;
+}
+
+p, h2{
+    width: 300px;
+}
+
+#photos {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between ;
+}
