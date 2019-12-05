@@ -1,4 +1,29 @@
 'use strict';
+// <!-- // global vars
+// const neighborhoods = [];
+
+// const myTemplate = Handlebars.compile($('#neighborhood-template').html());
+// const dogTemplate = Handlebars.compile($('#dog-template').html()); -->
+
+// <!-- Neighborhood.prototype.renderWithHandlebars = function(){
+//     const myHtml = myTemplate(this);
+//     console.log(myHtml);
+//     $('#neighborhoods').append(myHtml);
+//   }; -->
+
+//   <!-- neighborhoodDataSet.forEach(neighborhoodObj => {
+//     neighborhoods.push(new Neighborhood(neighborhoodObj));
+//   });
+  
+//   neighborhoods.forEach(neighborhood => {
+//     neighborhood.renderWithHandlebars();
+//   }); 
+
+const gallery = [];
+
+const galleryDataSet = []
+
+const myTemplate = Handlebars.compile($ ('#photo-template').html());
 
 function Horn (img_url, title, description, keyword, horn) {
     this.img_url = img_url;
@@ -7,6 +32,22 @@ function Horn (img_url, title, description, keyword, horn) {
     this.keyword = keyword;
     this.horn = horn;
 }
+
+Horn.prototype.renderWithHandlebars = function() {
+    const myHtml = myTemplate(this);
+    console.log('mythml', myHtml);
+    $('#photos').append(myHtml);
+}
+
+galleryDataSet.forEach(galleryObj => {
+    gallery.push(new Horn(galleryObj));
+});
+
+gallery.forEach(photos => {
+    photos.renderWithHandlebars();
+});
+
+
 
 Horn.prototype.renderWithJquery = function() {
     $('#photo-template').append(`
@@ -30,7 +71,6 @@ Horn.prototype.renderKeywordImages = function() {
 }
 
 
-
 Horn.prototype.renderWithJqueryClone = function () {
     let clone = $('#photo-template').clone();
 
@@ -48,18 +88,19 @@ Horn.prototype.renderOptions = function() {
     console.log('key',this.keyword);
 }
 
-$.get('data/page-1.json').then(
+$.get('data/page-2.json').then(
     (data) => {
         console.log(data);
         data.forEach(objFromJsonFile => {
             let horn = new Horn(objFromJsonFile.image_url, objFromJsonFile.title,objFromJsonFile.description, objFromJsonFile.keyword, objFromJsonFile.horn);
             console.log(objFromJsonFile.img_url);
             console.log(objFromJsonFile.title);
+            // galleryDataSet.push(horn);
             horn.renderWithJqueryClone();
             horn.renderOptions();
             horn.renderKeywordImages();
+            horn.renderWithHandlebars();
         });
+        
     });
-
-
-
+    
