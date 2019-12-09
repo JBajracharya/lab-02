@@ -96,7 +96,7 @@ $.get('data/page-2.json').then(
             console.log(objFromJsonFile.img_url);
             console.log(objFromJsonFile.title);
             // galleryDataSet.push(horn);
-            horn.renderWithJqueryClone();
+            // horn.renderWithJqueryClone();
             horn.renderOptions();
             horn.renderKeywordImages();
             horn.renderWithHandlebars();

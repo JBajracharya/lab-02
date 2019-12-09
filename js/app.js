@@ -1,15 +1,17 @@
 'use strict';
 
-function Horn (img_url, title, description, keyword, horn) {
-    this.img_url = img_url;
-    this.title = title;
-    this.description = description;
-    this.keyword = keyword;
-    this.horn = horn;
+const options = [];
+
+function Horn(img_url, title, description, keyword, horn) {
+	this.img_url = img_url;
+	this.title = title;
+	this.description = description;
+	this.keyword = keyword;
+	this.horn = horn;
 }
 
 Horn.prototype.renderWithJquery = function() {
-    $('#photo-template').append(`
+	$('#photo-template').append(`
     <div>
         <h2> ${this.title}</h2>
         <img src="${this.img_url}" />
@@ -17,49 +19,78 @@ Horn.prototype.renderWithJquery = function() {
     `);
 };
 
-Horn.prototype.renderKeywordImages = function() {
-    
-    $('#keywords').on('click', function(){
-        let selectedItem = $('#keywords').val();
-        console.log(1);
-        if(selectedItem === this.keyword) {
-            this.renderWithJquery();
-        }
-    })
+Horn.prototype.renderWithJqueryClone = function() {
+	let clone = $('#photo-template').clone();
 
-}
-
-
-
-Horn.prototype.renderWithJqueryClone = function () {
-    let clone = $('#photo-template').clone();
-
-    clone.find('h2').text(this.title);
+	clone.find('h2').text(this.title);
     clone.find('img').attr('src', this.img_url);
-    // clone.removeAttr('id');
+    clone.attr('id', `${this.keyword}`);
+	// clone.removeAttr('id');
 
-    $('#horns').append(clone);
+	$('#horns').append(clone);
 };
 
 Horn.prototype.renderOptions = function() {
-    $('#keywords').append(`
-    <option value=${this.keyword} > ${this.keyword}</option>
-    `)
-    console.log('key',this.keyword);
-}
+	if (!options.includes(this.keyword)) {
+		options.push(this.keyword);
+		$('#keywords').append(`
+        <option value=${this.keyword} > ${this.keyword}</option>
+        `);
+		// console.log('key',this.keyword);
+	}
+};
 
-$.get('data/page-1.json').then(
-    (data) => {
-        console.log(data);
-        data.forEach(objFromJsonFile => {
-            let horn = new Horn(objFromJsonFile.image_url, objFromJsonFile.title,objFromJsonFile.description, objFromJsonFile.keyword, objFromJsonFile.horn);
-            console.log(objFromJsonFile.img_url);
-            console.log(objFromJsonFile.title);
-            horn.renderWithJqueryClone();
-            horn.renderOptions();
-            horn.renderKeywordImages();
-        });
-    });
+Horn.prototype.renderKeywordImages = function() {
+	$('#keywords').on('click', function() {
+		let selectedItem = $('#keywords').val();
+		console.log(1);
+		if (selectedItem === this.keyword) {
+			this.renderWithJquery();
+		}
+	});
+};
 
+$.get('data/page-1.json').then((data) => {
+	data.forEach((objFromJsonFile) => {
+		let horn = new Horn(
+			objFromJsonFile.image_url,
+			objFromJsonFile.title,
+			objFromJsonFile.description,
+			objFromJsonFile.keyword,
+			objFromJsonFile.horn
+		);
+		// console.log(horn);
+		// console.log(objFromJsonFile.img_url);
+		// console.log(objFromJsonFile.title);
+		// debugger;
+		horn.renderWithJqueryClone();
+		horn.renderOptions();
+		horn.renderKeywordImages();
+	});
+});
 
+// // function filterHornImg() {
+//     $('select').on('change', function() {
+//       let selectedKeyword = $(this).val();
+//       if(selectedKeyword !== 'default') {
+//         $('section').hide();
+//         $(`section[class = "${selectedKeyword}"]`).show();
+//       } else {
+//         $('section').show();
+//       }
+//     });
+// //   }
+// //   filterHornImg();
 
+$('#keywords').on('change', function() {
+	$('section').hide();
+	let selectedItem = $('option:selected').val();
+	console.log('1', selectedItem);
+
+	$('option').each(function() {
+		if (selectedItem !== 'undefined') {
+			$(`section[class = "${selectedItem}"]`).show();
+			console.log($(`#${this.text}`));
+		}
+	});
+});
