@@ -10,7 +10,7 @@ function Horn(img_url, title, description, keyword, horn) {
 	this.horn = horn;
 }
 
-Horn.prototype.renderWithJquery = function() {
+Horn.prototype.renderWithJquery = function () {
 	$('#photo-template').append(`
     <div>
         <h2> ${this.title}</h2>
@@ -19,35 +19,22 @@ Horn.prototype.renderWithJquery = function() {
     `);
 };
 
-Horn.prototype.renderWithJqueryClone = function() {
+Horn.prototype.renderWithJqueryClone = function () {
 	let clone = $('#photo-template').clone();
 
 	clone.find('h2').text(this.title);
-    clone.find('img').attr('src', this.img_url);
-    clone.attr('id', `${this.keyword}`);
-	// clone.removeAttr('id');
-
+	clone.find('img').attr('src', this.img_url);
+	clone.attr('class', `${this.keyword}`);
 	$('#horns').append(clone);
 };
 
-Horn.prototype.renderOptions = function() {
+Horn.prototype.renderOptions = function () {
 	if (!options.includes(this.keyword)) {
 		options.push(this.keyword);
 		$('#keywords').append(`
         <option value=${this.keyword} > ${this.keyword}</option>
         `);
-		// console.log('key',this.keyword);
 	}
-};
-
-Horn.prototype.renderKeywordImages = function() {
-	$('#keywords').on('click', function() {
-		let selectedItem = $('#keywords').val();
-		console.log(1);
-		if (selectedItem === this.keyword) {
-			this.renderWithJquery();
-		}
-	});
 };
 
 $.get('data/page-1.json').then((data) => {
@@ -59,38 +46,20 @@ $.get('data/page-1.json').then((data) => {
 			objFromJsonFile.keyword,
 			objFromJsonFile.horn
 		);
-		// console.log(horn);
-		// console.log(objFromJsonFile.img_url);
-		// console.log(objFromJsonFile.title);
-		// debugger;
 		horn.renderWithJqueryClone();
 		horn.renderOptions();
-		horn.renderKeywordImages();
 	});
+	$('section').show();
+	$(`section:first-child`).hide();
 });
 
-// // function filterHornImg() {
-//     $('select').on('change', function() {
-//       let selectedKeyword = $(this).val();
-//       if(selectedKeyword !== 'default') {
-//         $('section').hide();
-//         $(`section[class = "${selectedKeyword}"]`).show();
-//       } else {
-//         $('section').show();
-//       }
-//     });
-// //   }
-// //   filterHornImg();
-
-$('#keywords').on('change', function() {
-	$('section').hide();
+$('#keywords').on('change', function () {
+	
 	let selectedItem = $('option:selected').val();
-	console.log('1', selectedItem);
-
-	$('option').each(function() {
-		if (selectedItem !== 'undefined') {
-			$(`section[class = "${selectedItem}"]`).show();
-			console.log($(`#${this.text}`));
-		}
-	});
+	if(selectedItem !== 'default'){
+		$('section').hide();
+		$(`section[class = "${selectedItem}"]`).show();
+	}else{
+		$('section').show();
+	}
 });
