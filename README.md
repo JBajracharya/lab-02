@@ -1,5 +1,7 @@
 # lab-02
 
+Assignment partners: Martin Papa and Jitendra Bajracharya
+
 Number and name of feature: 1.Display images________________________________
 
 Estimate of time needed to complete: _1hr____
